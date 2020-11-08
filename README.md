@@ -6,10 +6,10 @@ Things that are done:
 
     Welcome message done
     get user name done
+    Support to tell the user the time
     
 Things to add:
 
-    Support to tell the user the time
     Tell the user the day
     Make the assistant able to solve math questions
     able to open an application

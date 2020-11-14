@@ -31,7 +31,7 @@ sysTime SYSTEMTIME<>
 
 .code
 main PROC
- INVOKE SetConsoleTitle, ADDR titleSt;change console title for looks
+ INVOKE SetConsoleTitle, ADDR titleStr ;change console title for looks
  ;mov   edx,OFFSET Welcome		     ;Welcome msg
  ;call  WriteString
  ;call GetUsername					 ;Get ther user's name
@@ -162,7 +162,7 @@ fril:
  jmp continue
 
 satl:
- mov edx,OFFSET satl
+ mov edx,OFFSET sat
  call WriteString
  
 
@@ -250,6 +250,9 @@ message:							 ;Display a box that the time is up
  pop edx
  ret
 Timer ENDP
+
+
+
 
 
 math PROC

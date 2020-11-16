@@ -29,7 +29,7 @@ menuListM BYTE 10,13,"Here are things I can do:" ,10,13
 		 BYTE "1. Tell a joke", 10,13
 		 BYTE "2. Give inspiration quote" ,10,13
 		 BYTE "3. Set a timer", 10,13, 0
-askForUserInputM BYTE 10,13,"Please input (1,2,or 3): ", 0
+askForUserInputM BYTE 10,13,"Please input (1,2,or 3. Press 9 to quit): ", 0
 invalidInputM BYTE "Invalid Input, Please enter again",10,13,0
 
 
@@ -55,9 +55,6 @@ j5 BYTE "I was so blind, my friend suggested learn programing, now I CSharp", 10
 
 jokes DWORD j1,j2,j3,j4,j5
 
-
-
-
 colon BYTE ":", 0
 dash  BYTE "/", 0
 sysTime SYSTEMTIME<>
@@ -66,16 +63,6 @@ sysTime SYSTEMTIME<>
 main PROC
 
  INVOKE SetConsoleTitle, ADDR titleStr ;change console title for looks
- ;mov   edx,OFFSET Welcome		     ;Welcome msg
- ;call  WriteString
- ;call GetUsername					 ;Get ther user's name
- ;mov edx, OFFSET Welcoming
- ;call  WriteString
- ;mov edx, Username
- ;call  WriteString
- ;call Crlf
- ;mov edx,OFFSET help
- ;call WriteString
 
  call PrintTime
  call PrintDate
@@ -93,9 +80,6 @@ main PROC
  
  call PrintMenuList
  call PromtUserForInput
-
- ;call Timer
- ;call math
 
  exit
 main endp
@@ -120,7 +104,6 @@ GetUsername PROC
 GetUsername ENDP
 
 ;-----------------------------------------------------
-
 PrintMenuList PROC  
 ; 
 ; Receives: nothing
@@ -133,7 +116,7 @@ PrintMenuList ENDP
 
 ;-----------------------------------------------------
 PromtUserForInput PROC  
-; This keep asking for user input until esc is pressed
+; This keep asking for user input until esc(9) is pressed
 ;
 ; Receives: nothing
 ; Returns: nothing

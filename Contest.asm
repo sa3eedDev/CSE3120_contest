@@ -164,7 +164,7 @@ GetAJoke PROC
 	mov eax, 5
 	call RandomRange		  ;generate random number from 0 - 4
 	
-	mov edx,[quotes + 4*eax]  ; get random jokes and print out
+	mov edx,[jokes + 4*eax]  ; get random jokes and print out
 	call WriteString
 	
 	ret

@@ -62,6 +62,8 @@ sysTime SYSTEMTIME<>
 
 .code
 main PROC
+ call PrintTime
+ call PrintDate
  INVOKE SetConsoleTitle, ADDR titleStr
  mov   edx,OFFSET Welcome		
  call  WriteString
@@ -73,8 +75,7 @@ main PROC
  call Crlf
  mov edx,OFFSET help
  call WriteString
- ;call PrintTime
- ;call PrintDate
+ 
  call PrintMenuList
  call PromtUserForInput
 
@@ -155,6 +156,7 @@ askAgain:
 	mov edx, OFFSET invalidInputM
 	call WriteString
 	jmp startLoop
+
 endLoop:
 	ret
 promtUserForInput ENDP

@@ -64,8 +64,7 @@ sysTime SYSTEMTIME<>
 
 .code
 main PROC
-<<<<<<< HEAD
-=======
+
  INVOKE SetConsoleTitle, ADDR titleStr ;change console title for looks
  ;mov   edx,OFFSET Welcome		     ;Welcome msg
  ;call  WriteString
@@ -77,7 +76,7 @@ main PROC
  ;call Crlf
  ;mov edx,OFFSET help
  ;call WriteString
->>>>>>> 9e546429d807d4a60ac7134520253feb6938814a
+
  call PrintTime
  call PrintDate
  INVOKE SetConsoleTitle, ADDR titleStr
@@ -121,7 +120,7 @@ GetUsername PROC
 GetUsername ENDP
 
 ;-----------------------------------------------------
-<<<<<<< HEAD
+
 PrintMenuList PROC  
 ; 
 ; Receives: nothing
@@ -200,10 +199,7 @@ GetAQuote PROC
 GetAQuote ENDP
 
 
-;--------------
-PrintTime PROC
-;--------------
-=======
+
 PrintTime PROC
 ;
 ; Print the time of the system
@@ -211,7 +207,7 @@ PrintTime PROC
 ;
 ;
 ;-----------------------------------------------------
->>>>>>> 9e546429d807d4a60ac7134520253feb6938814a
+
  push eax
  push edx
 
@@ -235,12 +231,7 @@ PrintTime PROC
 
 PrintTime ENDP
 
-<<<<<<< HEAD
-;--------------
-PrintDate PROC
-;--------------
- push edx
-=======
+
 
 ;-----------------------------------------------------
 PrintDate PROC
@@ -253,7 +244,7 @@ PrintDate PROC
 
  push edx							 ;push the reg we going to use
  push eax
->>>>>>> 9e546429d807d4a60ac7134520253feb6938814a
+
 
  INVOKE GetLocalTime, ADDR sysTime   ;function used to fetch the system time 
  
@@ -330,11 +321,8 @@ continue:							 ;After printing the day we print the date
  ret
 PrintDate ENDP
 
-<<<<<<< HEAD
-;----------
-Timer PROC
-;----------
-=======
+
+
 ;-----------------------------------------------------
 Timer PROC
 ;
@@ -345,18 +333,18 @@ Timer PROC
 ;-----------------------------------------------------
 
 ;Push used registers
->>>>>>> 9e546429d807d4a60ac7134520253feb6938814a
+
  push edx
  push ecx
  push eax
  push ebx
  
-<<<<<<< HEAD
+
  mov edx,OFFSET SetTimer
-=======
+
 
  mov edx,OFFSET SetTimer		;Print the msg to user
->>>>>>> 9e546429d807d4a60ac7134520253feb6938814a
+
  call WriteString
  call	ReadInt						 ;Read the input as an Int
  mov edx,OFFSET secMinHr			 ;Print the msg asking user want for hr, min, or sec

@@ -11,12 +11,15 @@ Things that are done:
     Set a timer
     
 Things to add:
+    Add quotation option
+    Add telling joke option
+    Make the assistant able to solve math question
 
-    
-    Make the assistant able to solve math questions
+Possible things:
     able to open an application
     able to convert measurements
     ...
-    
-More to be added
+Improvement in feature:
+1. Timer should display the time count-down, it should have an escape key.
+
     

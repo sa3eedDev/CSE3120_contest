@@ -25,7 +25,7 @@ buffer   BYTE   BUFMAX+1 DUP(0)
 bufSize  DWORD  ?
 
 userInput BYTE ?
-menuListM BYTE "Here are things I can do:" ,10,13
+menuListM BYTE 10,13,"Here are things I can do:" ,10,13
 		 BYTE "1. Tell a joke", 10,13
 		 BYTE "2. Give inspiration quote" ,10,13
 		 BYTE "3. Set a timer", 10,13, 0
@@ -43,7 +43,7 @@ quotes DWORD q1,q2,q3,q4,q5
 
 j1 BYTE "I'm not anti-social; I'm just not user friendly." ,10,13,0
 j2 BYTE "We have enough youth—how about a fountain of smart?",10,13,0
-j3 BYTE "A Programmer was walking out of door for work, his wife said “while you’re out, buy some milk”",10,13,0
+j3 BYTE "A Programmer was walking out of door for work, his wife said: while you're out, buy some milk",10,13
    BYTE "and he never came home.",10,13,0
 j4 BYTE "Boss: What is your address?",10,13
    BYTE "Me: 173.168.15.10", 10,13

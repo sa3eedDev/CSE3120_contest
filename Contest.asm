@@ -50,15 +50,18 @@ menuListM BYTE "Here are things I can do:" ,10,13
 		 BYTE "1. Tell a joke", 10,13
 		 BYTE "2. Give inspiration quote" ,10,13
 		 BYTE "3. Set a timer", 10,13
-		 BYTE "4. Convert from feet to meter ",13,10
-		 BYTE "5. Convert from meter to feet ",13,10
-		 BYTE "6. Convert from inches to CM ",13,10
-		 BYTE "7. Convert from CM to inches ",13,10
-		 BYTE "8. Convert from Kg to lb ",13,10
-		 BYTE "9. Convert from lb to kg ",13,10
-		 BYTE "10. Convert from C to F ",13,10
-		 BYTE "11. Convert from F to C ",13,10,0
+		 BYTE "4. Measurement Converter",10,13,0
+
+convListM BYTE "1. Convert from feet to meter ",13,10
+		 BYTE "2. Convert from meter to feet ",13,10
+		 BYTE "3. Convert from inches to CM ",13,10
+		 BYTE "4. Convert from CM to inches ",13,10
+		 BYTE "5. Convert from Kg to lb ",13,10
+		 BYTE "6. Convert from lb to kg ",13,10
+		 BYTE "7. Convert from C to F ",13,10
+		 BYTE "8. Convert from F to C ",13,10,0
 askForUserInputM BYTE 10,13,"Please input (1,2,3, or 99 to exit): ", 0
+convInputM BYTE 10,13,"What measurement conversion you want to do? (1,2,3...8 or 99 to exit): ", 0
 invalidInputM BYTE "Invalid Input, Please enter again",10,13,0
 
 
@@ -185,28 +188,8 @@ startLoop:
 	je getTimer
 
 	cmp eax, 4
-	je getFTM
+	je getConv
 
-	cmp eax, 5
-	je getMTF
-
-	cmp eax, 6
-	je getITCM
-
-	cmp eax, 7
-	je getCMTI
-
-	cmp eax, 8
-	je getKGTLB
-
-	cmp eax, 9
-	je getLBTKG
-
-	cmp eax, 10
-	je getCTF
-
-	cmp eax, 11
-	je getFTC
 
 	jmp askAgain
 
@@ -220,37 +203,12 @@ getTimer:
 	call Timer
 	jmp startLoop
 
-getFTM:
-	call FtoM
+getConv:
+	call ConvInput
 	jmp startLoop
 
-getMTF:
-	call MtoF
-	jmp startLoop
 
-getITCM:
-	call ItoCM
-	jmp startLoop
 
-getCMTI:
-	call CMtoI
-	jmp startLoop
-
-getKGTLB:
-	call KgtoLb
-	jmp startLoop
-
-getLBTKG:
-	call LbtoKg
-	jmp  startLoop
-
-getCTF:
-	call CtoF
-	jmp startLoop
-
-getFTC:
-	call FtoC
-	jmp startLoop
 
 askAgain:
 	mov edx, OFFSET invalidInputM
@@ -474,53 +432,15 @@ message:							 ;Display a box that the time is up
 Timer ENDP
 
 
-
-
-
-math PROC
-
- push ecx
- push edx
- 
- mov	ecx,BUFMAX		; maximum character count
- mov	edx,OFFSET buffer   ; point to the buffer
- call	ReadString   
- .IF buffer[1] == "+"
-	mov al, buffer[0]
-	sub al, 48
-	mov dl, buffer[2]
-	sub dl, 48
-	add al, dl
- .ELSEIF buffer[0] == "-"
-	mov al, buffer[1]
-	sub al, 48
-	mov dl, buffer[3]
-	sub dl, 48
-	sub al, dl
- .ELSEIF buffer[1] == "-"
-    mov al, buffer[0]
-	sub al, 48
-	mov dl, buffer[2]
-	sub dl, 48
-	sub al, dl
- .ENDIF
- call WriteDec
-
- pop edx
- pop ecx
- ret
-
-math ENDP
-
 FtoM PROC
 
 
  mov edx,OFFSET convertFTM		;Print the msg to user
  call WriteString
  finit
- call ReadFloat	
- fmul DWORD PTR FTM
- call WriteFloat
+ call ReadFloat					;Read the Float number
+ fmul DWORD PTR FTM				; MUltiplay the number with the converter 
+ call WriteFloat				;Print the results
  call Crlf
  ret
 FtoM ENDP
@@ -613,5 +533,92 @@ FtoC PROC
  ret
 
 FtoC  ENDP
+
+;-----------------------------------------------------
+ConvInput PROC  
+; This keep asking for user input until esc is pressed
+; For measurement converstion
+;
+; Receives: nothing
+; Returns: nothing
+;-----------------------------------------------------
+ mov edx, OFFSET convListM
+ call WriteString
+startLoop:
+	mov edx, OFFSET convInputM
+	call WriteString
+	call ReadInt
+
+	cmp eax, 99
+	je endLoop
+
+	cmp eax, 1
+	je getFTM
+
+	cmp eax, 2
+	je getMTF
+
+	cmp eax, 3
+	je getITCM
+
+	cmp eax, 4
+	je getCMTI
+
+	cmp eax, 5
+	je getKGTLB
+
+	cmp eax, 6
+	je getLBTKG
+
+	cmp eax, 7
+	je getCTF
+
+	cmp eax, 8
+	je getFTC
+
+	jmp askAgain
+
+getFTM:
+	call FtoM
+	jmp startLoop
+
+getMTF:
+	call MtoF
+	jmp startLoop
+
+getITCM:
+	call ItoCM
+	jmp startLoop
+
+getCMTI:
+	call CMtoI
+	jmp startLoop
+
+getKGTLB:
+	call KgtoLb
+	jmp startLoop
+
+getLBTKG:
+	call LbtoKg
+	jmp  startLoop
+
+getCTF:
+	call CtoF
+	jmp startLoop
+
+getFTC:
+	call FtoC
+	jmp startLoop
+
+askAgain:
+	mov edx, OFFSET invalidInputM
+	call WriteString
+	jmp startLoop
+
+endLoop:
+	call PrintMenuList
+	ret
+ConvInput ENDP
+
 
 end main

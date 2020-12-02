@@ -15,8 +15,29 @@ SetTimer BYTE "Set Timer: ",13,10,0
 secMinHr BYTE "Seconds (s), min (m), hour (h): ",13,10,0
 TimeUp   BYTE "Time is up",0
 time     DWORD ?
+
+convertFTM BYTE "Convert from feet to meter: ",13,10,0
+convertMTF BYTE "Convert from meter to feet: ",13,10,0
+convertITCM BYTE "Convert from inches to CM: ",13,10,0
+convertCMTI BYTE "Convert from CM to inches: ",13,10,0
+convertKGTLB BYTE "Convert from Kg to lb: ",13,10,0
+convertLBTKG BYTE "Convert from lb to kg: ",13,10,0
+convertCTF BYTE "Convert from C to F: ",13,10,0
+convertFTC BYTE "Convert from F to C: ",13,10,0
+FTC		   DWORD 0.55555555555
+CTF	       DWORD 1.8
+ECtof	   DWORD 32.0
+LBTKG	   DWORD 0.45359237
+KGTLB	   DWORD 2.205
+CMTI	   DWORD 0.39370
+ITCM	   DWORD 2.54
+FTM        DWORD 0.3048
+MTF		   DWORD 3.281
+buf		   DWORD ?
+total      DWORD ?
+
 titleStr BYTE "Vine Virtual assistant",0
-Welcome BYTE "Hello, my name is Byte your virtual assistent",13,10,0
+Welcome BYTE "Hello, my name is Vine your virtual assistent",13,10,0
 UsernameM BYTE "What is your name?",13,10,0
 Welcoming BYTE "Nice to meet you ", 0 
 help BYTE "How can I help you?",13,10,0
@@ -25,11 +46,19 @@ buffer   BYTE   BUFMAX+1 DUP(0)
 bufSize  DWORD  ?
 
 userInput BYTE ?
-menuListM BYTE 10,13,"Here are things I can do:" ,10,13
+menuListM BYTE "Here are things I can do:" ,10,13
 		 BYTE "1. Tell a joke", 10,13
 		 BYTE "2. Give inspiration quote" ,10,13
-		 BYTE "3. Set a timer", 10,13, 0
-askForUserInputM BYTE 10,13,"Please input (1,2,or 3. Press 9 to quit): ", 0
+		 BYTE "3. Set a timer", 10,13
+		 BYTE "4. Convert from feet to meter ",13,10
+		 BYTE "5. Convert from meter to feet ",13,10
+		 BYTE "6. Convert from inches to CM ",13,10
+		 BYTE "7. Convert from CM to inches ",13,10
+		 BYTE "8. Convert from Kg to lb ",13,10
+		 BYTE "9. Convert from lb to kg ",13,10
+		 BYTE "10. Convert from C to F ",13,10
+		 BYTE "11. Convert from F to C ",13,10,0
+askForUserInputM BYTE 10,13,"Please input (1,2,3, or 99 to exit): ", 0
 invalidInputM BYTE "Invalid Input, Please enter again",10,13,0
 
 
@@ -43,7 +72,7 @@ quotes DWORD q1,q2,q3,q4,q5
 
 j1 BYTE "I'm not anti-social; I'm just not user friendly." ,10,13,0
 j2 BYTE "We have enough youth—how about a fountain of smart?",10,13,0
-j3 BYTE "A Programmer was walking out of door for work, his wife said: while you're out, buy some milk",10,13
+j3 BYTE "A Programmer was walking out of door for work, his wife said “while you’re out, buy some milk”",10,13,0
    BYTE "and he never came home.",10,13,0
 j4 BYTE "Boss: What is your address?",10,13
    BYTE "Me: 173.168.15.10", 10,13
@@ -55,6 +84,9 @@ j5 BYTE "I was so blind, my friend suggested learn programing, now I CSharp", 10
 
 jokes DWORD j1,j2,j3,j4,j5
 
+
+
+
 colon BYTE ":", 0
 dash  BYTE "/", 0
 sysTime SYSTEMTIME<>
@@ -63,6 +95,16 @@ sysTime SYSTEMTIME<>
 main PROC
 
  INVOKE SetConsoleTitle, ADDR titleStr ;change console title for looks
+ ;mov   edx,OFFSET Welcome		     ;Welcome msg
+ ;call  WriteString
+ ;call GetUsername					 ;Get ther user's name
+ ;mov edx, OFFSET Welcoming
+ ;call  WriteString
+ ;mov edx, Username
+ ;call  WriteString
+ ;call Crlf
+ ;mov edx,OFFSET help
+ ;call WriteString
 
  call PrintTime
  call PrintDate
@@ -80,6 +122,9 @@ main PROC
  
  call PrintMenuList
  call PromtUserForInput
+ ;call FttoM
+ ;call Timer
+ ;call math
 
  exit
 main endp
@@ -104,6 +149,7 @@ GetUsername PROC
 GetUsername ENDP
 
 ;-----------------------------------------------------
+
 PrintMenuList PROC  
 ; 
 ; Receives: nothing
@@ -116,7 +162,7 @@ PrintMenuList ENDP
 
 ;-----------------------------------------------------
 PromtUserForInput PROC  
-; This keep asking for user input until esc(9) is pressed
+; This keep asking for user input until esc is pressed
 ;
 ; Receives: nothing
 ; Returns: nothing
@@ -126,7 +172,7 @@ startLoop:
 	call WriteString
 	call ReadInt
 
-	cmp eax, 9
+	cmp eax, 99
 	je endLoop
 
 	cmp eax, 1
@@ -138,6 +184,30 @@ startLoop:
 	cmp eax, 3
 	je getTimer
 
+	cmp eax, 4
+	je getFTM
+
+	cmp eax, 5
+	je getMTF
+
+	cmp eax, 6
+	je getITCM
+
+	cmp eax, 7
+	je getCMTI
+
+	cmp eax, 8
+	je getKGTLB
+
+	cmp eax, 9
+	je getLBTKG
+
+	cmp eax, 10
+	je getCTF
+
+	cmp eax, 11
+	je getFTC
+
 	jmp askAgain
 
 getJoke:
@@ -148,6 +218,38 @@ getQuote:
 	jmp startLoop
 getTimer:
 	call Timer
+	jmp startLoop
+
+getFTM:
+	call FtoM
+	jmp startLoop
+
+getMTF:
+	call MtoF
+	jmp startLoop
+
+getITCM:
+	call ItoCM
+	jmp startLoop
+
+getCMTI:
+	call CMtoI
+	jmp startLoop
+
+getKGTLB:
+	call KgtoLb
+	jmp startLoop
+
+getLBTKG:
+	call LbtoKg
+	jmp  startLoop
+
+getCTF:
+	call CtoF
+	jmp startLoop
+
+getFTC:
+	call FtoC
 	jmp startLoop
 
 askAgain:
@@ -323,9 +425,6 @@ Timer PROC
  push ebx
  
 
- mov edx,OFFSET SetTimer
-
-
  mov edx,OFFSET SetTimer		;Print the msg to user
 
  call WriteString
@@ -410,7 +509,109 @@ math PROC
  pop edx
  pop ecx
  ret
+
 math ENDP
 
+FtoM PROC
+
+
+ mov edx,OFFSET convertFTM		;Print the msg to user
+ call WriteString
+ finit
+ call ReadFloat	
+ fmul DWORD PTR FTM
+ call WriteFloat
+ call Crlf
+ ret
+FtoM ENDP
+
+MtoF PROC
+
+
+ mov edx,OFFSET convertMTF		;Print the msg to user
+ call WriteString
+ finit
+ call ReadFloat	
+ fmul DWORD PTR MTF
+ call WriteFloat
+ call Crlf
+ ret
+MtoF ENDP
+
+ItoCM PROC
+
+ mov edx,OFFSET convertITCM		;Print the msg to user
+ call WriteString
+ finit
+ call ReadFloat	
+ fmul DWORD PTR ITCM
+ call WriteFloat
+ call Crlf
+ ret
+ItoCM ENDP
+
+CMtoI PROC
+
+ mov edx,OFFSET convertCMTI		;Print the msg to user
+ call WriteString
+ finit
+ call ReadFloat	
+ fmul DWORD PTR CMTI
+ call WriteFloat
+ call Crlf
+ ret
+CMtoI  ENDP
+
+KgtoLb PROC
+
+ mov edx,OFFSET convertKGTLB		;Print the msg to user
+ call WriteString
+ finit
+ call ReadFloat	
+ fmul DWORD PTR KGTLB
+ call WriteFloat
+ call Crlf
+ ret
+KgtoLb  ENDP
+
+LbtoKg PROC
+
+ mov edx,OFFSET convertLBTKG		;Print the msg to user
+ call WriteString
+ finit
+ call ReadFloat	
+ fmul DWORD PTR LBTKG
+ call WriteFloat
+ call Crlf
+ ret
+LbtoKg  ENDP
+
+CtoF PROC
+
+ mov edx,OFFSET convertCTF		;Print the msg to user
+ call WriteString
+ finit
+ call ReadFloat	
+ fmul DWORD PTR CTF
+ fadd DWORD PTR ECtof
+ call WriteFloat
+ call Crlf
+ ret
+
+CtoF  ENDP
+
+FtoC PROC
+
+ mov edx,OFFSET convertFTC		;Print the msg to user
+ call WriteString
+ finit
+ call ReadFloat	
+ fsub DWORD PTR ECtof
+ fmul DWORD PTR FTC
+ call WriteFloat
+ call Crlf
+ ret
+
+FtoC  ENDP
 
 end main
